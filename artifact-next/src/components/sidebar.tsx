@@ -5,7 +5,7 @@ import { useState } from "react";
 export function SideBar() {
   const [search, setSearch] = useState("");
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);
   }
 

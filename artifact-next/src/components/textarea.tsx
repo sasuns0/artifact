@@ -1,17 +1,14 @@
 'use client';
 
-import { useState } from "react";
+type TextAreaProps = {
+  text: string
+  setTextAction: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+};
 
-export function TextArea() {
-  const [text, setText] = useState("");
-
-  const handleDocumentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-  }
-
+export function TextArea({ text, setTextAction }: TextAreaProps) {
   return (
     <textarea value={text}
-      onChange={handleDocumentChange}
+      onChange={setTextAction}
       name="document"
       className="h-full text-xl w-full resize-none outline-none "
       autoFocus
