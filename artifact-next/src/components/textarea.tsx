@@ -10,7 +10,8 @@ export function TextArea({ text, setTextAction }: TextAreaProps) {
     <textarea value={text}
       onChange={setTextAction}
       name="document"
-      className="h-full text-xl w-full resize-none outline-none "
+      placeholder="Enter Text"
+      className="border-neutral-700 border-1 p-4 h-full text-xl w-full resize-none outline-none"
       autoFocus
     />
   );

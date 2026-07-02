@@ -1,10 +1,21 @@
 'use server';
 
-export async function createDocument(text: string) {
+import { IDocument } from "./types";
+
+export async function createDocument(title: string, text: string) {
   const res = await fetch("http://localhost:8080/document", {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, title }),
+  });
+
+  return res.json();
+}
+
+export async function queryDocument(queryString: string): Promise<IDocument[]> {
+  const res = await fetch(`http://localhost:8080/search?text=${queryString}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
   });
 
   return res.json();

@@ -15,6 +15,13 @@
       "when": 1782311949756,
       "tag": "0001_damp_northstar",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783029158222,
+      "tag": "0002_wooden_vanisher",
+      "breakpoints": true
     }
   ]
 }
