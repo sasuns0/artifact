@@ -4,7 +4,7 @@ import { queryDocument } from "@/app/lib/actions";
 import { IDocument } from "@/app/lib/types";
 import { useEffect, useState } from "react";
 
-export function SideBar() {
+export function SearchBar() {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<IDocument[]>([]);
 
@@ -21,7 +21,7 @@ export function SideBar() {
   }
 
   return (
-    <div className="p-4 w-144 bg-black-500 h-full">
+    <div className="flex flex-col gap-4 p-4 w-144 bg-black-500 h-full">
       <input
         name="search"
         onChange={handleSearchChange}
@@ -30,6 +30,16 @@ export function SideBar() {
         className="w-full bg-gray-700 outline-none p-2"
         type="text"
       />
+      <div className="flex flex-col gap-2">
+        {
+          searchResults.map((document) => (
+            <div key={document.id} className="flex flex-col gap-2 border-neutral-700 border-1 outline-none p-4">
+              <span>{document.title}</span>
+              <span className="truncate">{document.text}</span>
+            </div>
+          ))
+        }
+      </div>
     </div>
   )
 }

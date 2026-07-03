@@ -6,9 +6,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from './db/schema/schema';
 import { Document, DocumentType, ISearchQueryString } from './types';
 import Type from 'typebox';
-import { sql } from 'drizzle-orm';
-import { getTableColumns } from 'drizzle-orm';
-import { desc } from 'drizzle-orm';
+import { sql, desc, getTableColumns } from 'drizzle-orm';
 
 const db = drizzle({
   connection: {
@@ -56,25 +54,29 @@ server.get<{
 }, async (request, reply) => {
   const search = request.query.text;
 
-  const textVector = sql`to_tsvector('english', ${schema.documentsTable.text})`;
-  const queryText = sql`to_tsquery('english', ${"adsasda"})`;
-  const rank = sql`ts_rank(${textVector}, ${queryText})`;
-  const condition = sql`${textVector} @@ ${queryText}`;
+  const matchQuery = sql`(
+  setweight(to_tsvector('english', ${schema.documentsTable.title}), 'A') ||
+  setweight(to_tsvector('english', ${schema.documentsTable.text}), 'B')), to_tsquery('english', ${search})`;
 
-  const [res] = await db
+  const res = await db
     .select({
-      rank
+      ...getTableColumns(schema.documentsTable),
+      rank: sql`ts_rank(${matchQuery})`,
+      rankCd: sql`ts_rank_cd(${matchQuery})`,
     })
     .from(schema.documentsTable)
-    .where(condition)
-    .orderBy(desc(rank))
-
-  console.log("res", res);
+    .where(
+      sql`(
+      setweight(to_tsvector('english', ${schema.documentsTable.title}), 'A') ||
+      setweight(to_tsvector('english', ${schema.documentsTable.text}), 'B')
+      ) @@ to_tsquery('english', ${search})`,
+    )
+    .orderBy((t) => desc(t.rank)) as DocumentType[];
 
   reply
     .code(200)
     .header('Content-Type', 'application/json; charset=utf-8')
-    .send({ text: '' });
+    .send(res);
 })
 
 server.listen({ port: 8080 }, (err, address) => {
