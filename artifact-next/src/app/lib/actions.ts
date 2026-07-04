@@ -1,6 +1,6 @@
 'use server';
 
-import { IDocument } from "./types";
+import { QueryResponse, Document } from "./types";
 
 export async function createDocument(title: string, text: string) {
   const res = await fetch("http://localhost:8080/document", {
@@ -12,11 +12,12 @@ export async function createDocument(title: string, text: string) {
   return res.json();
 }
 
-export async function queryDocument(queryString: string): Promise<IDocument[]> {
+export async function queryDocument(queryString: string): Promise<QueryResponse> {
   const res = await fetch(`http://localhost:8080/search?text=${queryString}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });
 
-  return res.json();
+  const resData = await res.json() as QueryResponse;
+  return resData;
 }

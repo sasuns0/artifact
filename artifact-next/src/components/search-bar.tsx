@@ -1,15 +1,20 @@
 'use client';
 
 import { queryDocument } from "@/app/lib/actions";
-import { IDocument } from "@/app/lib/types";
+import { QueryResponse } from "@/app/lib/types";
 import { useEffect, useState } from "react";
 
 export function SearchBar() {
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState<IDocument[]>([]);
+  const [searchResults, setSearchResults] = useState<QueryResponse>();
 
   useEffect(() => {
     const timer = setTimeout(async () => {
+      if (search.length < 3 && searchResults) {
+        setSearchResults(undefined);
+        return;
+      };
+
       const res = await queryDocument(search);
       setSearchResults(res);
     }, 200)
@@ -32,12 +37,14 @@ export function SearchBar() {
       />
       <div className="flex flex-col gap-2">
         {
-          searchResults.map((document) => (
-            <div key={document.id} className="flex flex-col gap-2 border-neutral-700 border-1 outline-none p-4">
-              <span>{document.title}</span>
-              <span className="truncate">{document.text}</span>
-            </div>
-          ))
+          searchResults && (
+            searchResults?.status == 200 ? searchResults?.data?.map((document) => (
+              <div key={document.id} className="flex flex-col gap-2 border-neutral-700 border-1 outline-none p-4">
+                <span>{document.title}</span>
+                <span className="truncate">{document.text}</span>
+              </div>
+            )) : <span>Something went wrong</span>
+          )
         }
       </div>
     </div>
