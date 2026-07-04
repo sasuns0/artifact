@@ -4,7 +4,7 @@ import fastify, { FastifyReply } from 'fastify'
 import { drizzle } from 'drizzle-orm/node-postgres';
 
 import * as schema from './db/schema/schema';
-import { CreateDocumentResponse, CreateDocumentResponseType, Document, DocumentType, ISearchQueryString, ServerErrorResponse } from './types';
+import { CreateDocumentResponse, CreateDocumentResponseType, Document, DocumentType, ISearchQueryString } from './types';
 import Type from 'typebox';
 import { sql, desc, getTableColumns } from 'drizzle-orm';
 
