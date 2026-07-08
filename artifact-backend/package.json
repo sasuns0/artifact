@@ -8,11 +8,14 @@
     "start": "node index.ts",
     "dev": "tsx --watch index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:migrate": "drizzle-kit migrate",
     "build": "tsc -p tsconfig.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "packageManager": "pnpm@9.15.0",
   "dependencies": {
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",

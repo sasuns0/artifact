@@ -1,9 +1,9 @@
 'use server';
 
-import { QueryResponse, Document } from "./types";
+import { QueryResponse } from "./types";
 
 export async function createDocument(title: string, text: string) {
-  const res = await fetch("http://localhost:8080/document", {
+  const res = await fetch("http://backend:8080/document", {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, title }),
@@ -13,7 +13,7 @@ export async function createDocument(title: string, text: string) {
 }
 
 export async function queryDocument(queryString: string): Promise<QueryResponse> {
-  const res = await fetch(`http://localhost:8080/search?text=${queryString}`, {
+  const res = await fetch(`http://backend:8080/search?text=${queryString}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });

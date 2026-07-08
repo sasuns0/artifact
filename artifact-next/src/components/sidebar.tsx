@@ -1,12 +1,12 @@
 'use client';
 
 import { queryDocument } from "@/app/lib/actions";
-import { IDocument } from "@/app/lib/types";
+import { Document } from "@/app/lib/types";
 import { useEffect, useState } from "react";
 
 export function SideBar() {
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState<IDocument[]>([]);
+  const [searchResults, setSearchResults] = useState<Document[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(async () => {
