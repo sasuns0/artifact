@@ -1,0 +1,7 @@
+Implement authentication with JWT - WIP
+Document schema with ownerId, collaborators and isPublic
+WebSocket rooms by document id
+Replace plain text with CRDT editor
+Show active users and cursor positions
+Invite link that grants temporary access to just that document
+
