@@ -1,22 +1,19 @@
 import 'dotenv/config';
 
-import fastify, { FastifyReply } from 'fastify'
-import { drizzle } from 'drizzle-orm/node-postgres';
-
-import * as schema from './db/schema/schema';
-import { CreateDocumentResponse, CreateDocumentResponseType, Document, DocumentType, ISearchQueryString } from './types';
-import Type from 'typebox';
-import { sql, desc, getTableColumns } from 'drizzle-orm';
+import fastify from 'fastify'
 
 import './db/index';
 import { sendErrorReply } from './utils';
 
-const server = fastify()
+import documentRoute from './routes/document-route';
 
+const server = fastify()
 
 server.setErrorHandler((error, request, reply) => {
   sendErrorReply(reply);
 })
+
+server.register(documentRoute);
 
 server.listen({ host: '0.0.0.0', port: 8080 }, (err, address) => {
   if (err) {
