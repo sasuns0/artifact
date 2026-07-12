@@ -1,19 +1,26 @@
 import 'dotenv/config';
 
-import fastify from 'fastify'
-
-import './db/index';
-import { sendErrorReply } from './utils';
-
-import documentRoute from './routes/document-route';
+import fastify, { FastifyReply } from 'fastify'
+import documentRoutes from './routes/document-route';
+import fastifyJwt from '@fastify/jwt';
 
 const server = fastify()
+
+function sendErrorReply(reply: FastifyReply) {
+  reply
+    .status(500)
+    .send({ ok: false });
+}
 
 server.setErrorHandler((error, request, reply) => {
   sendErrorReply(reply);
 })
 
-server.register(documentRoute);
+server.register(fastifyJwt, {
+  secret: process.env.JWT_SECRET!
+});
+
+server.register(documentRoutes);
 
 server.listen({ host: '0.0.0.0', port: 8080 }, (err, address) => {
   if (err) {
