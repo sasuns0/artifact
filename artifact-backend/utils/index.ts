@@ -1,7 +1,7 @@
 import { FastifyReply } from "fastify";
 
-export function sendErrorReply(reply: FastifyReply) {
+export function sendErrorReply(reply: FastifyReply, message?: string) {
   reply
     .status(500)
-    .send({ ok: false });
+    .send({ ok: false, message });
 }

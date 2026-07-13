@@ -5,3 +5,9 @@ export const documentsTable = pgTable("documents", {
   title: varchar(),
   text: text()
 });
+
+export const usersTable = pgTable("users", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  username: varchar().unique(),
+  password: varchar()
+})

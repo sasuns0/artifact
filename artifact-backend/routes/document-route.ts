@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { CreateDocumentResponse, CreateDocumentResponseType, Document, DocumentType, ISearchQueryString } from "../types";
+import { CreateDocumentResponse, CreateDocumentResponseType, DocumentType, SearchQueryString } from "../types/document";
 import Type from "typebox";
 import { getTableColumns, sql } from "drizzle-orm";
 
@@ -7,6 +7,7 @@ import * as schema from '../db/schema/schema';
 import { desc } from "drizzle-orm";
 import { db } from "../db";
 import { sendErrorReply } from "../utils";
+import { Document } from "../types/index";
 
 async function routes(fastify: FastifyInstance, options: Object) {
   fastify.post<{
@@ -38,7 +39,7 @@ async function routes(fastify: FastifyInstance, options: Object) {
     });
 
   fastify.get<{
-    Querystring: ISearchQueryString
+    Querystring: SearchQueryString
   }>('/search', {
     schema: {
       querystring: Type.Object({
