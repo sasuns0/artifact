@@ -3,7 +3,6 @@ import { User } from '.';
 
 export const AuthResponse = Type.Object({
   status: Type.Number(),
-  data: Type.String()
 })
 
 export type AuthResponseType = Static<typeof AuthResponse>;

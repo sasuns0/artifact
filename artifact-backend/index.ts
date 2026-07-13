@@ -4,8 +4,8 @@ import fastify, { FastifyReply } from 'fastify'
 import documentRoutes from './routes/document-route';
 import authRoutes from './routes/auth-route';
 import fastifyJwt from '@fastify/jwt';
+import fastifyCookie from '@fastify/cookie';
 
-const server = fastify()
 
 function sendErrorReply(reply: FastifyReply) {
   reply
@@ -13,13 +13,17 @@ function sendErrorReply(reply: FastifyReply) {
     .send({ ok: false });
 }
 
-server.setErrorHandler((error, request, reply) => {
-  sendErrorReply(reply);
-})
+const server = fastify()
 
 server.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!
 });
+
+server.register(fastifyCookie);
+
+server.setErrorHandler((error, request, reply) => {
+  sendErrorReply(reply);
+})
 
 server.register(authRoutes);
 server.register(documentRoutes);
