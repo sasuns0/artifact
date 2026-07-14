@@ -6,7 +6,6 @@ import authRoutes from './routes/auth-route';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 
-
 function sendErrorReply(reply: FastifyReply) {
   reply
     .status(500)
@@ -15,11 +14,17 @@ function sendErrorReply(reply: FastifyReply) {
 
 const server = fastify()
 
+server.register(fastifyCookie);
+
 server.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET!
+  namespace: 'access',
+  secret: process.env.JWT_SECRET!,
 });
 
-server.register(fastifyCookie);
+server.register(fastifyJwt, {
+  namespace: 'refresh',
+  secret: process.env.REFRESH_SECRET!,
+});
 
 server.setErrorHandler((error, request, reply) => {
   sendErrorReply(reply);

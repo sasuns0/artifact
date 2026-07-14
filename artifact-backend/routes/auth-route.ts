@@ -5,6 +5,7 @@ import { FastifyInstance } from 'fastify';
 import argon2 from 'argon2';
 import { sendErrorReply } from '../utils';
 import { eq } from 'drizzle-orm';
+import { accessJwt, refreshJwt } from '..';
 
 async function routes(fastify: FastifyInstance) {
   fastify.post<{
@@ -58,8 +59,11 @@ async function routes(fastify: FastifyInstance) {
           return;
         }
 
-        const accessToken = fastify.jwt.sign({ sub: user.id }, { expiresIn: '15m' });
-        const refreshToken = fastify.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
+        const accessJwt = (fastify.jwt as any).access ?? fastify.jwt;
+        const refreshJwt = (fastify.jwt as any).refresh ?? fastify.jwt;
+
+        const accessToken = accessJwt.sign({ sub: user.id }, { expiresIn: '15m' });
+        const refreshToken = refreshJwt.sign({ sub: user.id }, { expiresIn: '7d' });
 
         const [res] = await db.insert(refreshTokensTable).values({ userId: user.id, token: refreshToken }).returning({ id: refreshTokensTable.id });
 
@@ -88,6 +92,7 @@ async function routes(fastify: FastifyInstance) {
         sendErrorReply(reply, { message: 'Something went wrong' });
         return;
       } catch (err) {
+        console.log(err);
         sendErrorReply(reply);
       }
     },
@@ -111,7 +116,10 @@ async function routes(fastify: FastifyInstance) {
       const accessToken = req.cookies.access_token;
 
       if (accessToken) {
-        const payload = fastify.jwt.verify(accessToken) as { sub: number };
+        const accessJwt = (fastify.jwt as any).access ?? fastify.jwt;
+        const refreshJwt = (fastify.jwt as any).refresh ?? fastify.jwt;
+
+        const payload = accessJwt.verify(accessToken) as { sub: number };
 
         await db.delete(refreshTokensTable).where(eq(refreshTokensTable.userId, payload.sub))
 

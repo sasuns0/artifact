@@ -23,6 +23,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@types/pg@8.20.0)(pg@8.22.0)
+      fast-jwt:
+        specifier: ^6.2.4
+        version: 6.2.4
       fastify:
         specifier: ^5.8.5
         version: 5.8.5
